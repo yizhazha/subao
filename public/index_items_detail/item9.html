@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"><script src="item2_files/plugin.js" async="" charset="utf-8" mod_name="tkapi-plugin"></script><script src="item2_files/click.js" async="" charset="utf-8" mod_name="tkapi-click"></script><script src="item2_files/push.js"></script><script src="item2_files/hm.js"></script><script async="" src="item2_files/analytics.js"></script><script charset="gbk" async="" src="item2_files/tkapi.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="applicable-device" content="pc,mobile">
+    <link rel="stylesheet" href="item2_files/common-bd30d45f57.css">
+    <script type="text/javascript" src="item2_files/jquery-1-c7143b6bed.js"></script>
+    <script type="text/javascript" src="item2_files/common-1242da89df.js"></script>
+    <link rel="stylesheet" href="item2_files/zkDetail-746cf7a2bf.css">
+</head>
+
+<body _hover-ignore="1">
+<h1 class="sno">ins捕梦网挂饰led小彩灯</h1>
+<div id="header" class="header">
+
+    <div class="header-top" _hover-ignore="1">
+        <div class="wrapper">
+            <a class="logo-area" href="./">
+                <img src="item2_files/logo-ef4e6a15ac.png" class="logo" _hover-ignore="1">
+                <div class="slogan">
+                    <p class="t1">天猫淘宝</p>
+                    <p class="t1">一折疯抢</p>
+                    <p class="t2">sqsb.com</p>
+                </div>
+            </a>
+
+            <div class="search-area">
+                <div class="suggest-area lg"></div>
+                <div class="input-area"><i></i><input class="search-input unfocus" value="输入关键词" type="text"></div>
+                <a class="search-btn">搜索</a>
+                <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+            </div>
+
+            <div class="slogan-area">
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>正品好货</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>人工精选</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>专享优惠券</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>全场包邮</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-area-plh">
+        <div class="tab-area">
+            <div class="wrapper">
+                <div class="cate-area">
+                    <a href="./" class="cate-item jxtj active">分 类 推 荐<span class="cate-rec"></span></a>
+                </div>
+                <div class="search-area sm">
+                    <div class="suggest-area sm"></div>
+                    <i></i>
+                    <input class="search-input sm unfocus" value="输入关键词" type="text">
+                    <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+                </div>
+                <div class="Login" style="display: block;">
+
+                    <div class="login">
+                        <span class="login-login">登录</span> | <span class="login-login">注册</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="login-alert-bg">
+    <div class="login-alert">
+        <img src="item2_files/login-c344517a04.png" alt="省钱快报">
+        <h2>欢迎登录</h2>
+        <div class="close">×</div>
+        <div class="content">
+            <div class="tel">
+                <input maxlength="11" placeholder="手机号" type="tel">
+            </div>
+            <div class="checkCode">
+                <input maxlength="4" placeholder="输入验证码" type="tel">
+            </div>
+            <div class="get-checkCode">发送短信验证码</div>
+            <p></p>
+            <!--<div class="checkbox">
+                <input type="checkbox"><span>记住我</span>
+            </div>-->
+            <div class="post-data">立即登录</div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$(function () {
+	    //展示登陆弹框
+		$('.login-login').on('click',function () {
+			$('.login-alert-bg').show();
+        })
+        //关闭展示登陆弹框
+        $('.close').on('click',function () {
+            $('.login-alert-bg').hide();
+        })
+		//获取验证码
+        let timer=null;
+        let num=60;
+        let flag=true;
+        let isPhone='';
+        let reg = /^1[3|4|5|7|8|9]\d{9}$/;
+        $('.get-checkCode').on('click',function () {
+            if (!flag) {
+                return;
+            }
+            isPhone = $('.tel>input').val();
+            if (isPhone == '') {
+                $('.content p').text('请输入手机号');
+				return
+            }
+            if (!reg.test(isPhone)) {
+                $('.content p').text('请输入正确手机号');
+				return
+            }
+
+            var self = $(this);
+            $.ajax({
+                'url': '/account/sms/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                },
+                'success': function (xhr) {
+                    self.addClass('color');
+                    $('.content p').text('');
+                    timer = setInterval(function () {
+                        num--;
+                        self.text(num + 's 后重发');
+                        flag = false;
+                        if (num == 0) {
+                            clearInterval(timer);
+                            self.removeClass('color');
+                            self.text('发送短信验证码');
+                            num = 60;
+                            flag = true;
+                        }
+                    }, 1000);
+                }
+            })
+        });
+        //获取是否记住密码标识
+        //登陆提交数据
+		$('.post-data').on('click',function () {
+		    let checked=$(".checkbox>input[type='checkbox']").is(':checked')
+
+            var phone = $('.tel>input').val();
+            var checkCode = $('.checkCode>input').val();
+            if(checkCode==''&&phone==''){
+                $('.content p').text('手机号、验证码不能为空');
+                return
+			}
+            if(phone==''){
+                $('.content p').text('请输入手机号');
+                return
+            }
+            if (!reg.test(phone)) {
+                $('.content p').text('请输入正确手机号');
+                return
+            }
+            if(checkCode==''){
+                $('.content p').text('请输入验证码');
+                return
+			}
+
+
+
+            // if(isPhone!=phone){
+            //     $('.content p').text('请输入正确手机号');
+            // }
+
+			$.ajax({
+                'url': '/account/login/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                    "sms_code": $('.checkCode>input').val(),
+                    "checked": checked,
+                },
+                'success': function (xhr) {
+					if(xhr.status_code===1){
+						window.location.href=window.location.href;
+					}else {
+
+					    $('.content p').text(xhr.message)
+					}
+				}
+			})
+        })
+    })
+    $(function(){
+        var headerBar = $('.header-bar'),
+            tabArea = $('#header .tab-area'),
+            sa = $('.suggest-area'),
+            si = $('.search-input'),
+            errTip = $('.err-tip'),
+            defaultTxt = '输入关键词',
+            sb = $('.search-btn');
+
+        headerBar.find('.close').on('click',function(){
+            headerBar.remove();
+            var d = new Date();
+            d.setTime(d.getTime()+(24*60*60*1000));
+            $.cookie('hideHeaderBar',1,{
+                path:'/',
+                expires:d
+            });
+        });
+
+        $(document).on('scroll',function(){
+            var _top = $(document).scrollTop();
+            if(_top >= 400){
+                $('.Login').hide();
+                tabArea.addClass('fixed');
+            }else{
+                tabArea.removeClass('fixed');
+                $('.Login').show();
+            }
+        });
+
+        setTimeout(function(){
+            si.on('focus',function(){
+                var _this = $(this),
+                    q = _this.val();
+                if(q == defaultTxt){
+                    si.val('');
+                }
+                _this.removeClass('unfocus');
+
+                keywordSuggest(q,_this);
+            }).on('blur',function(){
+                if($(this).val() == ''){
+                    si.val(defaultTxt);
+                }
+                $(this).addClass('unfocus');
+            }).on('keyup',function(e){
+                var _this = $(this);
+                var keycode = e.keyCode,
+                    q = $(this).val();
+
+                $('.search-input.unfocus').val(q);
+
+                if(keycode == 13 && q.trim()){
+                    goSearch(q.trim());
+                }
+
+                if(q.trim().match(/http|\.tmall|\.taobao/)){
+                    errTip.show();
+                }else{
+                    errTip.hide();
+                }
+
+                keywordSuggest(q,_this);
+            });
+        },0);
+
+
+        function keywordSuggest(q,_this){
+            q = q.trim();
+            if(q && q != defaultTxt){
+                $.ajax({
+                    url:'/s/suggestWord/',
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        q:q
+                    },
+                    success:function(res){
+                        if(res.status_code == 1 && res.data && res.data.list){
+                            sa = _this.hasClass('sm') ? $('.suggest-area.sm') : $('.suggest-area.lg');
+                            sa.html(createHTMLSuggest(res.data.list));
+                            $('.suggest-item').on('click',function(){
+                                goSearch($(this).html());
+                            });
+                        }
+                    }
+                });
+            }else{
+                $('.suggest-area').html('');
+            }
+        }
+
+        function createHTMLSuggest(list){
+            var htmlStr = '<div class="suggest-list">';
+            for(var i=0,len=list.length;i<len;i++){
+                htmlStr += '<p class="suggest-item">'+list[i]+'</p>';
+            }
+            if(list && list.length > 0){
+                htmlStr += '<p class="suggest-close">关闭</p>';
+            }
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+
+        $(document).on('click',function(e){
+            var tar = $(e.target);
+            if(!tar.hasClass('suggest-area') && !tar.hasClass('search-input')){
+                $('.suggest-area').html('');
+            }
+        });
+
+        sb.on('click',function(){
+            var q = $(si[0]).val().trim();
+            if(q && q != defaultTxt){
+                goSearch(q);
+            }
+        });
+
+        function goSearch(q){
+            if(q.match(/http|\.tmall|\.taobao/)){
+                return;
+            }
+            ga('send','event','搜索','搜索','搜索');
+            var cahnnel = Util.getQueryString(window.location.href)['channel'];
+            window.location.href = '/s/?q='+encodeURIComponent(q)+(cahnnel?'&channel='+cahnnel:'');
+        }
+    });
+</script>
+
+<style rel="stylesheet">
+    .breadCrumbs{
+        width: 1100px;
+        margin: 20px auto 0;
+        font-size:12px;
+        font-family:HiraginoSansGB-W3;
+        color:rgba(102,102,102,1);
+        line-height:18px;
+    }
+</style>
+<p class="breadCrumbs" _hover-ignore="1">
+    <a>省钱速报 </a>
+    
+            <a>&gt; 百货 </a>
+    
+    
+    <a>&gt; ins捕梦网挂饰led小彩灯</a>
+    
+
+</p>
+
+
+<div class="wrapper zk-detail" style="margin-top: 18px">
+	<div class="wrapper-l zk-main">
+		<div class="zk-content">
+			<div class="img-area"><img class="lazy" style="opacity: 1;" data-original="//img.alicdn.com/imgextra/i1/2762523528/TB2BY05rY1YBuNjSszhXXcUsFXa_!!2762523528.jpg" src="item9_files/TB2BY05rY1YBuNjSszhXXcUsFXa_2762523528.jpg" alt="ins捕梦网挂饰led小彩灯"></div>
+			<div class="info-area">
+				<h1 class="title">ins捕梦网挂饰led小彩灯</h1>
+				<p class="desc elli"></p>
+				<p class="endtime" id="eventTimeStr">优惠券即将失效:&nbsp;<em>5</em>天<em>10</em>时<em>17</em>分<em>11</em>秒</p>
+				
+				<div class="platform">
+					<span>包邮</span>
+					<i style="background-image: url(//s1.sqkb.com/dist/img/common/platform_taobao-5ce46e8ed1.png);"></i>
+				</div>
+				<div class="stat">
+					<p class="price-area">
+						<span class="ori-price">现价：¥7</span>
+						<span class="price">券后价：&nbsp;¥
+							<em class="int">4</em>
+							<em class="decimal"></em>
+						</span>
+					</p>
+					<div class="buy-area">
+						
+						<p class="desc">有效期内领券下单，享受立减优惠！</p>
+						<a data-ga-event="折扣详情页:点击:领券按钮:1" need-ahc="1" rel="nofollow" target="_blank" href="https://uland.taobao.com/coupon/edetail?e=bIIUmlRAVzcGQASttHIRqf1%2FetuP9udHc8v9VPmSpAVXdEL77USqHh4jHLheWrlf0nBQScQFBFxfIfIjFOE%2FYWjp926RHPMNZs6fBPmPlJFUDVLqupa8LsHVq%2Fdxq%2FDATJnbK5InWznd4dRbTb5WN9VqM6BWlz38UtqM5E5JIeUdTUFoGLUGkbrCu5rz0tMX&amp;traceId=0b0123ae15372001028306683e&amp;union_lens=lensId:0b092931_0794_165e8441e3c_a12b&amp;nowake=1&amp;tj1=1&amp;tj2=1" class="buy-btn">
+							领券立减<em>3</em>元
+						</a>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="wrapper">
+    <div class="rel-zk-area" style="margin-bottom: 30px;">
+        <p class="head tab-p"><span class="span1 color">商品详情</span>
+
+        <div class="rel-zk-list clearfix none" style="min-height: 300px;">
+
+        </div>
+
+        <div class="rel-zk-detailPic">
+            <!--左侧图片-->
+            <div class="left-content">
+
+                <img style="height: 1052.8px; opacity: 1;" src="item9_files/1.jpg">
+                <img style="height: 1052.8px; opacity: 1;" src="item9_files/2.jpg">
+                <img style="height: 1052.8px; opacity: 1;" src="item9_files/3.jpg">
+
+
+            </div>
+
+            <!--右侧内容-->
+            <div class="right-content">
+                <a>
+                    <div class="seller">
+                        <p>卖家信息</p>
+                        <h5>傲娴旗舰店</h5>
+
+                        <div class="describe">
+
+                            <span>描述 : <b>4.8</b></span>
+
+                            <span>服务 : <b>4.7</b></span>
+
+                            <span>物流 : <b>4.7</b></span>
+
+                        </div>
+
+                        <div class="coupons">
+                            <span>40元券</span>
+                            <span>40元券</span>
+                            <span>45元券</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="right-content">
+                <h3>热门搜索</h3>
+                <ul>
+
+                    <li>
+                        <a title="卷发">
+                            卷发
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="夹克">
+                            夹克
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="去黑头面膜撕拉式">
+                            去黑头面膜撕拉式
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="孕妇睡衣">
+                            孕妇睡衣
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="去黑头面膜">
+                            去黑头面膜
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="去角质面部女">
+                            去角质面部女
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="发">
+                            发
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="口红哑光">
+                            口红哑光
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="呢子大衣女">
+                            呢子大衣女
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="运动鞋男">
+                            运动鞋男
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="唇油">
+                            唇油
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="oppor9s手机壳">
+                            oppor9s手机壳
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="小凳子">
+                            小凳子
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="袜子中筒">
+                            袜子中筒
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="卫生巾夜用">
+                            卫生巾夜用
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="卧蚕">
+                            卧蚕
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="毛呢大衣女">
+                            毛呢大衣女
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="眼睛">
+                            眼睛
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="超能洗衣液">
+                            超能洗衣液
+                        </a>
+                    </li>
+
+                    <li>
+                        <a title="mac小辣椒">
+                            mac小辣椒
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+            <!--	<div class="right-content">
+                    <h3>感兴趣店铺</h3>
+                    <div class="shop">
+
+                    </div>
+                </div>-->
+            <div class="right-content">
+                <h3>热门品类</h3>
+                <ul>
+
+
+
+                    <li>
+                        <a>
+                            美妆
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            女装
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a href="./">
+                            女鞋
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a target="./">
+                            母婴
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            食品
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            百货
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            数码
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            个护
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a>
+                            运动
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="footer-bootom">
+        <div class="wrapper">
+            <p>地址：北京市通州区东石东一路 · 京ICP备18047471号-1 · 省钱速报 - 北京与你互娱科技有限公司旗下品牌</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="index_files/swiper4-56c8f9de0f.js"></script>
+
+<script type="text/javascript">
+    $(function(){
+        var sw = new Swiper('.banner-area',{
+            autoplay: {
+                delay:5000,
+                disableOnInteraction:false,
+            },
+            loop:false,
+            pagination: {
+                el: '#bannerPager',
+                clickable:true,
+            }
+        });
+
+    });
+</script>

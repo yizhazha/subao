@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="applicable-device" content="pc,mobile">
+    <link rel="stylesheet" href="meizhuang_files/common-bd30d45f57.css">
+    <script src="meizhuang_files/push.js"></script><script src="meizhuang_files/hm.js"></script><script async="" src="meizhuang_files/analytics.js"></script><script type="text/javascript" src="meizhuang_files/jquery-1-c7143b6bed.js"></script>
+    <script type="text/javascript" src="meizhuang_files/common-1242da89df.js"></script>
+</head>
+<body>
+<h1 class="sno">母婴优惠券</h1>
+
+<div id="header" class="header">
+    <div class="header-top">
+        <div class="wrapper">
+            <a class="logo-area" href="./" data-ga-event="头部:点击:头部_LOGO">
+                <img src="erji_files/logo-ef4e6a15ac.png" class="logo">
+                <div class="slogan">
+                    <p class="t1">天猫淘宝</p>
+                    <p class="t1">一折疯抢</p>
+                    <p class="t2">sqsb.com</p>
+                </div>
+            </a>
+
+            <div class="search-area">
+                <div class="suggest-area lg"></div>
+                <div class="input-area"><i></i><input class="search-input unfocus" value="输入关键词" type="text"></div>
+                <a href="javascript:;" class="search-btn">搜索</a>
+                <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+            </div>
+
+            <div class="slogan-area">
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>正品好货</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>人工精选</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>专享优惠券</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>全场包邮</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-area-plh">
+        <div class="tab-area">
+            <div class="wrapper">
+                <div class="search-area sm">
+                    <div class="suggest-area sm"></div>
+                    <i></i>
+                    <input class="search-input sm unfocus" value="输入关键词" type="text">
+                    <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+                </div>
+                <div class="Login" style="display: block;">
+
+                    <div class="login">
+                        <span class="login-login">登录</span> | <span class="login-login">注册</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="login-alert-bg">
+    <div class="login-alert">
+        <img src="erji_files/login-c344517a04.png" alt="省钱快报">
+        <h2>欢迎登录</h2>
+        <div class="close">×</div>
+        <div class="content">
+            <div class="tel">
+                <input maxlength="11" placeholder="手机号" type="tel">
+            </div>
+            <div class="checkCode">
+                <input maxlength="4" placeholder="输入验证码" type="tel">
+            </div>
+            <div class="get-checkCode">发送短信验证码</div>
+            <p></p>
+            <!--<div class="checkbox">
+                <input type="checkbox"><span>记住我</span>
+            </div>-->
+            <div class="post-data">立即登录</div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$(function () {
+	    //展示登陆弹框
+		$('.login-login').on('click',function () {
+			$('.login-alert-bg').show();
+        })
+        //关闭展示登陆弹框
+        $('.close').on('click',function () {
+            $('.login-alert-bg').hide();
+        })
+		//获取验证码
+        let timer=null;
+        let num=60;
+        let flag=true;
+        let isPhone='';
+        let reg = /^1[3|4|5|7|8|9]\d{9}$/;
+        $('.get-checkCode').on('click',function () {
+            if (!flag) {
+                return;
+            }
+            isPhone = $('.tel>input').val();
+            if (isPhone == '') {
+                $('.content p').text('请输入手机号');
+				return
+            }
+            if (!reg.test(isPhone)) {
+                $('.content p').text('请输入正确手机号');
+				return
+            }
+
+            var self = $(this);
+            $.ajax({
+                'url': '/account/sms/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                },
+                'success': function (xhr) {
+                    self.addClass('color');
+                    $('.content p').text('');
+                    timer = setInterval(function () {
+                        num--;
+                        self.text(num + 's 后重发');
+                        flag = false;
+                        if (num == 0) {
+                            clearInterval(timer);
+                            self.removeClass('color');
+                            self.text('发送短信验证码');
+                            num = 60;
+                            flag = true;
+                        }
+                    }, 1000);
+                }
+            })
+        });
+        //获取是否记住密码标识
+        //登陆提交数据
+		$('.post-data').on('click',function () {
+		    let checked=$(".checkbox>input[type='checkbox']").is(':checked')
+
+            var phone = $('.tel>input').val();
+            var checkCode = $('.checkCode>input').val();
+            if(checkCode==''&&phone==''){
+                $('.content p').text('手机号、验证码不能为空');
+                return
+			}
+            if(phone==''){
+                $('.content p').text('请输入手机号');
+                return
+            }
+            if (!reg.test(phone)) {
+                $('.content p').text('请输入正确手机号');
+                return
+            }
+            if(checkCode==''){
+                $('.content p').text('请输入验证码');
+                return
+			}
+
+
+
+            // if(isPhone!=phone){
+            //     $('.content p').text('请输入正确手机号');
+            // }
+
+			$.ajax({
+                'url': '/account/login/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                    "sms_code": $('.checkCode>input').val(),
+                    "checked": checked,
+                },
+                'success': function (xhr) {
+					if(xhr.status_code===1){
+						window.location.href=window.location.href;
+					}else {
+
+					    $('.content p').text(xhr.message)
+					}
+				}
+			})
+        })
+    })
+    $(function(){
+        var headerBar = $('.header-bar'),
+            tabArea = $('#header .tab-area'),
+            sa = $('.suggest-area'),
+            si = $('.search-input'),
+            errTip = $('.err-tip'),
+            defaultTxt = '输入关键词',
+            sb = $('.search-btn');
+
+        headerBar.find('.close').on('click',function(){
+            headerBar.remove();
+            var d = new Date();
+            d.setTime(d.getTime()+(24*60*60*1000));
+            $.cookie('hideHeaderBar',1,{
+                path:'/',
+                expires:d
+            });
+        });
+
+        $(document).on('scroll',function(){
+            var _top = $(document).scrollTop();
+            if(_top >= 400){
+                $('.Login').hide();
+                tabArea.addClass('fixed');
+            }else{
+                tabArea.removeClass('fixed');
+                $('.Login').show();
+            }
+        });
+
+        setTimeout(function(){
+            si.on('focus',function(){
+                var _this = $(this),
+                    q = _this.val();
+                if(q == defaultTxt){
+                    si.val('');
+                }
+                _this.removeClass('unfocus');
+
+                keywordSuggest(q,_this);
+            }).on('blur',function(){
+                if($(this).val() == ''){
+                    si.val(defaultTxt);
+                }
+                $(this).addClass('unfocus');
+            }).on('keyup',function(e){
+                var _this = $(this);
+                var keycode = e.keyCode,
+                    q = $(this).val();
+
+                $('.search-input.unfocus').val(q);
+
+                if(keycode == 13 && q.trim()){
+                    goSearch(q.trim());
+                }
+
+                if(q.trim().match(/http|\.tmall|\.taobao/)){
+                    errTip.show();
+                }else{
+                    errTip.hide();
+                }
+
+                keywordSuggest(q,_this);
+            });
+        },0);
+
+
+        function keywordSuggest(q,_this){
+            q = q.trim();
+            if(q && q != defaultTxt){
+                $.ajax({
+                    url:'/s/suggestWord/',
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        q:q
+                    },
+                    success:function(res){
+                        if(res.status_code == 1 && res.data && res.data.list){
+                            sa = _this.hasClass('sm') ? $('.suggest-area.sm') : $('.suggest-area.lg');
+                            sa.html(createHTMLSuggest(res.data.list));
+                            $('.suggest-item').on('click',function(){
+                                goSearch($(this).html());
+                            });
+                        }
+                    }
+                });
+            }else{
+                $('.suggest-area').html('');
+            }
+        }
+
+        function createHTMLSuggest(list){
+            var htmlStr = '<div class="suggest-list">';
+            for(var i=0,len=list.length;i<len;i++){
+                htmlStr += '<p class="suggest-item">'+list[i]+'</p>';
+            }
+            if(list && list.length > 0){
+                htmlStr += '<p class="suggest-close">关闭</p>';
+            }
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+
+        $(document).on('click',function(e){
+            var tar = $(e.target);
+            if(!tar.hasClass('suggest-area') && !tar.hasClass('search-input')){
+                $('.suggest-area').html('');
+            }
+        });
+
+        sb.on('click',function(){
+            var q = $(si[0]).val().trim();
+            if(q && q != defaultTxt){
+                goSearch(q);
+            }
+        });
+
+        function goSearch(q){
+            if(q.match(/http|\.tmall|\.taobao/)){
+                return;
+            }
+            ga('send','event','搜索','搜索','搜索');
+            var cahnnel = Util.getQueryString(window.location.href)['channel'];
+            window.location.href = '/s/?q='+encodeURIComponent(q)+(cahnnel?'&channel='+cahnnel:'');
+        }
+    });
+</script>
+
+<div class="wrapper cate-wrapper">
+
+    <div class="collection-top">
+        <p class="head">母婴商品列表</p>
+    </div>
+	<div class="zk-list g-zk-list clearfix" id="couponList">
+        <div>
+            <!--运营位优先展示 start-->
+            
+            <!--运营位优先展示 end-->
+
+            <!--正常业务 start-->
+
+
+            <!--正常业务 end-->
+
+        </div>
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/1835243320/TB2iwLRaED.BuNjt_h7XXaNDVXa_!!1835243320.jpg_400x400" alt="博比龙 防走失带牵引绳防丢绳">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                博比龙 防走失带牵引绳防丢绳
+            </p>
+            <div class="raw-price-area">现价：¥29.8<p class="sold">
+                销量 90825</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>25</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i1/2946960642/O1CN011Gc4imBUEaPHWiu_!!2946960642.jpg_400x400" alt="南极人 秋季薄款孕妇托腹打底裤 2条">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                南极人 秋季薄款孕妇托腹打底裤 2条
+            </p>
+            <div class="raw-price-area">现价：¥58<p class="sold">
+                销量 29407</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">33</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/2837343527/TB2t06StuuSBuNjy1XcXXcYjFXa_!!2837343527.jpg_400x400" alt="硅胶婴儿吃饭围兜">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                硅胶婴儿吃饭围兜
+            </p>
+            <div class="raw-price-area">现价：¥12.9<p class="sold">
+                销量 57430</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i2/2453805906/TB1tiB9otcnBKNjSZR0XXcFqFXa_!!0-item_pic.jpg_400x400" alt="芭芭猴  透气网面女童鞋">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                芭芭猴  透气网面女童鞋
+            </p>
+            <div class="raw-price-area">现价：¥49.9<p class="sold">
+                销量 18939</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">29</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/tfscom/i4/2454240726/TB2rI9PpwmTBuNjy1XbXXaMrVXa_!!2454240726.jpg_400x400" alt="舒奈儿拉拉裤婴儿薄款干爽透气 72片">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+
+                舒奈儿拉拉裤婴儿薄款干爽透气 72片
+            </p>
+            <div class="raw-price-area">现价：¥69.9<p class="sold">
+                销量 23417</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">49</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i1/1999857360/TB2UIQEXi6guuRjy0FmXXa0DXXa_!!1999857360-0-item_pic.jpg_400x400" alt="儿童秋季韩版长袖T恤">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                儿童秋季韩版长袖T恤
+            </p>
+            <div class="raw-price-area">现价：¥38<p class="sold">
+                销量 30064</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">28</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>30</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i3/2249500870/TB2t_2zjDJYBeNjy1zeXXahzVXa_!!2249500870.jpg_400x400" alt="婴儿防水纯棉隔尿垫 70X90cm">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                婴儿防水纯棉隔尿垫 70X90cm
+            </p>
+            <div class="raw-price-area">现价：¥37.8<p class="sold">
+                销量 46581</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">7</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/1649724996/TB2W3vue7.HL1JjSZFuXXX8dXXa_!!1649724996.jpg_400x400" alt="纯棉新生儿加厚保暖毛巾袜 5双">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                纯棉新生儿加厚保暖毛巾袜 5双
+            </p>
+            <div class="raw-price-area">现价：¥16.8<p class="sold">
+                销量 3238</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">13</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i1/1801041818/TB2uKG5zHSYBuNjSspiXXXNzpXa_!!1801041818.jpg_400x400" alt="可爱韩国粉红豹公仔">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                可爱韩国粉红豹公仔
+            </p>
+            <div class="raw-price-area">现价：¥48<p class="sold">
+                销量 6318</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">28</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>35</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i4/2057526645/TB2aKhKGGmWBuNjy1XaXXXCbXXa_!!2057526645.jpg_400x400" alt="邦仔 超薄干爽透气婴儿纸尿裤 L码50片">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+
+                邦仔 超薄干爽透气婴儿纸尿裤 L码50片
+            </p>
+            <div class="raw-price-area">现价：¥59.9<p class="sold">
+                销量 9118</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">24</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>1</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i4/3705850696/TB2Wd31rKuSBuNjSsplXXbe8pXa_!!3705850696.jpg_400x400" alt="春夏季纯棉宝宝袜子 5双">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                春夏季纯棉宝宝袜子 5双
+            </p>
+            <div class="raw-price-area">现价：¥10.8<p class="sold">
+                销量 43908</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>15</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i4/746254434/TB2.m9zvdcnBKNjSZR0XXcFqFXa_!!746254434-0-item_pic.jpg_400x400" alt="纯棉婴儿连体衣">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                纯棉婴儿连体衣
+            </p>
+            <div class="raw-price-area">现价：¥39<p class="sold">
+                销量 25561</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">24</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i3/2452209169/TB23NFMnsUrBKNjSZPxXXX00pXa_!!2452209169.jpg_400x400" alt="怡恩贝 婴儿手口湿巾10包800抽">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                怡恩贝 婴儿手口湿巾10包800抽
+            </p>
+            <div class="raw-price-area">现价：¥39.9<p class="sold">
+                销量 48641</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">29</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i1/2095691020/TB1W8Z3rVkoBKNjSZFkXXb4tFXa_!!0-item_pic.jpg_400x400" alt="韩国公主发圈不伤发小皮筋">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                韩国公主发圈不伤发小皮筋
+            </p>
+            <div class="raw-price-area">现价：¥9<p class="sold">
+                销量 21296</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">6</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/2559521050/TB2.U8NCuuSBuNjSsplXXbe8pXa_!!2559521050.jpg_400x400" alt="儿童羽绒棉服外套">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                儿童羽绒棉服外套
+            </p>
+            <div class="raw-price-area">现价：¥59<p class="sold">
+                销量 2136</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">39</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/1649142442/TB2Y3_HzZuYBuNkSmRyXXcA3pXa_!!1649142442.jpg_400x400" alt="2018新款运动卫衣两件套">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                2018新款运动卫衣两件套
+            </p>
+            <div class="raw-price-area">现价：¥79<p class="sold">
+                销量 948</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?77a9bae208c432b76f7d08cdef6e61ec";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>

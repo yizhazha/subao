@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="applicable-device" content="pc,mobile">
+    <link rel="stylesheet" href="meizhuang_files/common-bd30d45f57.css">
+    <script src="meizhuang_files/push.js"></script><script src="meizhuang_files/hm.js"></script><script async="" src="meizhuang_files/analytics.js"></script><script type="text/javascript" src="meizhuang_files/jquery-1-c7143b6bed.js"></script>
+    <script type="text/javascript" src="meizhuang_files/common-1242da89df.js"></script>
+</head>
+<body>
+<h1 class="sno">数码优惠券</h1>
+
+<div id="header" class="header">
+    <div class="header-top">
+        <div class="wrapper">
+            <a class="logo-area" href="./" data-ga-event="头部:点击:头部_LOGO">
+                <img src="erji_files/logo-ef4e6a15ac.png" class="logo">
+                <div class="slogan">
+                    <p class="t1">天猫淘宝</p>
+                    <p class="t1">一折疯抢</p>
+                    <p class="t2">sqsb.com</p>
+                </div>
+            </a>
+
+            <div class="search-area">
+                <div class="suggest-area lg"></div>
+                <div class="input-area"><i></i><input class="search-input unfocus" value="输入关键词" type="text"></div>
+                <a href="javascript:;" class="search-btn">搜索</a>
+                <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+            </div>
+
+            <div class="slogan-area">
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>正品好货</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>人工精选</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>专享优惠券</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>全场包邮</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-area-plh">
+        <div class="tab-area">
+            <div class="wrapper">
+                <div class="search-area sm">
+                    <div class="suggest-area sm"></div>
+                    <i></i>
+                    <input class="search-input sm unfocus" value="输入关键词" type="text">
+                    <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+                </div>
+                <div class="Login" style="display: block;">
+
+                    <div class="login">
+                        <span class="login-login">登录</span> | <span class="login-login">注册</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="login-alert-bg">
+    <div class="login-alert">
+        <img src="erji_files/login-c344517a04.png" alt="省钱快报">
+        <h2>欢迎登录</h2>
+        <div class="close">×</div>
+        <div class="content">
+            <div class="tel">
+                <input maxlength="11" placeholder="手机号" type="tel">
+            </div>
+            <div class="checkCode">
+                <input maxlength="4" placeholder="输入验证码" type="tel">
+            </div>
+            <div class="get-checkCode">发送短信验证码</div>
+            <p></p>
+            <!--<div class="checkbox">
+                <input type="checkbox"><span>记住我</span>
+            </div>-->
+            <div class="post-data">立即登录</div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$(function () {
+	    //展示登陆弹框
+		$('.login-login').on('click',function () {
+			$('.login-alert-bg').show();
+        })
+        //关闭展示登陆弹框
+        $('.close').on('click',function () {
+            $('.login-alert-bg').hide();
+        })
+		//获取验证码
+        let timer=null;
+        let num=60;
+        let flag=true;
+        let isPhone='';
+        let reg = /^1[3|4|5|7|8|9]\d{9}$/;
+        $('.get-checkCode').on('click',function () {
+            if (!flag) {
+                return;
+            }
+            isPhone = $('.tel>input').val();
+            if (isPhone == '') {
+                $('.content p').text('请输入手机号');
+				return
+            }
+            if (!reg.test(isPhone)) {
+                $('.content p').text('请输入正确手机号');
+				return
+            }
+
+            var self = $(this);
+            $.ajax({
+                'url': '/account/sms/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                },
+                'success': function (xhr) {
+                    self.addClass('color');
+                    $('.content p').text('');
+                    timer = setInterval(function () {
+                        num--;
+                        self.text(num + 's 后重发');
+                        flag = false;
+                        if (num == 0) {
+                            clearInterval(timer);
+                            self.removeClass('color');
+                            self.text('发送短信验证码');
+                            num = 60;
+                            flag = true;
+                        }
+                    }, 1000);
+                }
+            })
+        });
+        //获取是否记住密码标识
+        //登陆提交数据
+		$('.post-data').on('click',function () {
+		    let checked=$(".checkbox>input[type='checkbox']").is(':checked')
+
+            var phone = $('.tel>input').val();
+            var checkCode = $('.checkCode>input').val();
+            if(checkCode==''&&phone==''){
+                $('.content p').text('手机号、验证码不能为空');
+                return
+			}
+            if(phone==''){
+                $('.content p').text('请输入手机号');
+                return
+            }
+            if (!reg.test(phone)) {
+                $('.content p').text('请输入正确手机号');
+                return
+            }
+            if(checkCode==''){
+                $('.content p').text('请输入验证码');
+                return
+			}
+
+
+
+            // if(isPhone!=phone){
+            //     $('.content p').text('请输入正确手机号');
+            // }
+
+			$.ajax({
+                'url': '/account/login/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                    "sms_code": $('.checkCode>input').val(),
+                    "checked": checked,
+                },
+                'success': function (xhr) {
+					if(xhr.status_code===1){
+						window.location.href=window.location.href;
+					}else {
+
+					    $('.content p').text(xhr.message)
+					}
+				}
+			})
+        })
+    })
+    $(function(){
+        var headerBar = $('.header-bar'),
+            tabArea = $('#header .tab-area'),
+            sa = $('.suggest-area'),
+            si = $('.search-input'),
+            errTip = $('.err-tip'),
+            defaultTxt = '输入关键词',
+            sb = $('.search-btn');
+
+        headerBar.find('.close').on('click',function(){
+            headerBar.remove();
+            var d = new Date();
+            d.setTime(d.getTime()+(24*60*60*1000));
+            $.cookie('hideHeaderBar',1,{
+                path:'/',
+                expires:d
+            });
+        });
+
+        $(document).on('scroll',function(){
+            var _top = $(document).scrollTop();
+            if(_top >= 400){
+                $('.Login').hide();
+                tabArea.addClass('fixed');
+            }else{
+                tabArea.removeClass('fixed');
+                $('.Login').show();
+            }
+        });
+
+        setTimeout(function(){
+            si.on('focus',function(){
+                var _this = $(this),
+                    q = _this.val();
+                if(q == defaultTxt){
+                    si.val('');
+                }
+                _this.removeClass('unfocus');
+
+                keywordSuggest(q,_this);
+            }).on('blur',function(){
+                if($(this).val() == ''){
+                    si.val(defaultTxt);
+                }
+                $(this).addClass('unfocus');
+            }).on('keyup',function(e){
+                var _this = $(this);
+                var keycode = e.keyCode,
+                    q = $(this).val();
+
+                $('.search-input.unfocus').val(q);
+
+                if(keycode == 13 && q.trim()){
+                    goSearch(q.trim());
+                }
+
+                if(q.trim().match(/http|\.tmall|\.taobao/)){
+                    errTip.show();
+                }else{
+                    errTip.hide();
+                }
+
+                keywordSuggest(q,_this);
+            });
+        },0);
+
+
+        function keywordSuggest(q,_this){
+            q = q.trim();
+            if(q && q != defaultTxt){
+                $.ajax({
+                    url:'/s/suggestWord/',
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        q:q
+                    },
+                    success:function(res){
+                        if(res.status_code == 1 && res.data && res.data.list){
+                            sa = _this.hasClass('sm') ? $('.suggest-area.sm') : $('.suggest-area.lg');
+                            sa.html(createHTMLSuggest(res.data.list));
+                            $('.suggest-item').on('click',function(){
+                                goSearch($(this).html());
+                            });
+                        }
+                    }
+                });
+            }else{
+                $('.suggest-area').html('');
+            }
+        }
+
+        function createHTMLSuggest(list){
+            var htmlStr = '<div class="suggest-list">';
+            for(var i=0,len=list.length;i<len;i++){
+                htmlStr += '<p class="suggest-item">'+list[i]+'</p>';
+            }
+            if(list && list.length > 0){
+                htmlStr += '<p class="suggest-close">关闭</p>';
+            }
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+
+        $(document).on('click',function(e){
+            var tar = $(e.target);
+            if(!tar.hasClass('suggest-area') && !tar.hasClass('search-input')){
+                $('.suggest-area').html('');
+            }
+        });
+
+        sb.on('click',function(){
+            var q = $(si[0]).val().trim();
+            if(q && q != defaultTxt){
+                goSearch(q);
+            }
+        });
+
+        function goSearch(q){
+            if(q.match(/http|\.tmall|\.taobao/)){
+                return;
+            }
+            ga('send','event','搜索','搜索','搜索');
+            var cahnnel = Util.getQueryString(window.location.href)['channel'];
+            window.location.href = '/s/?q='+encodeURIComponent(q)+(cahnnel?'&channel='+cahnnel:'');
+        }
+    });
+</script>
+
+<div class="wrapper cate-wrapper">
+
+    <div class="collection-top">
+        <p class="head">数码商品列表</p>
+    </div>
+	<div class="zk-list g-zk-list clearfix" id="couponList">
+        <div>
+            <!--运营位优先展示 start-->
+            
+            <!--运营位优先展示 end-->
+
+            <!--正常业务 start-->
+
+            <!--正常业务 end-->
+
+        </div>
+
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/tfscom/i1/2921460786/TB2_s9McY_I8KJjy1XaXXbsxpXa_!!2921460786.jpg_400x400" alt="果儿 J15蓝牙耳机无线迷耳塞">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                果儿 J15蓝牙耳机无线迷耳塞
+            </p>
+            <div class="raw-price-area">现价：¥39.8<p class="sold">
+                销量 49971</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">19</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i2/843421904/TB2gxR_b3wjyKJjSsppXXaxUpXa_!!843421904.jpg_400x400" alt="英菲克 有线静音鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                英菲克 有线静音鼠标
+            </p>
+            <div class="raw-price-area">现价：¥19.9<p class="sold">
+                销量 63461</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i2/2114585981/TB2QHzYc3OI.eBjSszhXXbHvFXa_!!2114585981.jpg_400x400" alt="都市方圆 牧马人有线键盘鼠标套装">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                都市方圆 牧马人有线键盘鼠标套装
+            </p>
+            <div class="raw-price-area">现价：¥27.8<p class="sold">
+                销量 35132</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">22</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/tfscom/i1/1589613703/TB2UnNKcZnI8KJjSsziXXb8QpXa_!!1589613703.jpg_400x400" alt="英菲克 机械有线游戏鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                英菲克 机械有线游戏鼠标
+            </p>
+            <div class="raw-price-area">现价：¥37.9<p class="sold">
+                销量 53251</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">17</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i1/2964008329/TB2P0QfcSuJ.eBjy0FgXXXBBXXa_!!2964008329.jpg_400x400" alt="品胜 智能带USB接口插座">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                品胜 智能带USB接口插座
+            </p>
+            <div class="raw-price-area">现价：¥22.9<p class="sold">
+                销量 291</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">17</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i1/1704445753/TB2Q_eneetTMeFjSZFOXXaTiVXa_!!1704445753.jpg_400x400" alt="雅酷美 mini隐形无线蓝牙耳机">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                雅酷美 mini隐形无线蓝牙耳机
+            </p>
+            <div class="raw-price-area">现价：¥16.8<p class="sold">
+                销量 53914</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">11</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/6/12/_1528784178584037524_400x400" alt="飞利浦 USB有线静音鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                飞利浦 USB有线静音鼠标
+            </p>
+            <div class="raw-price-area">现价：¥28.8<p class="sold">
+                销量 45303</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">18</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i4/2130380005/TB2.98RdnAKh1JjSZFDXXbKlFXa_!!2130380005.jpg_400x400" alt="品胜 多功能USB智能插座">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                品胜 多功能USB智能插座
+            </p>
+            <div class="raw-price-area">现价：¥52.9<p class="sold">
+                销量 116</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">49</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/tfscom/i1/2044237984/TB2N0eHarArBKNjSZFLXXc_dVXa_!!2044237984.png_400x400" alt="Purion 通用入耳式耳机">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                Purion 通用入耳式耳机
+            </p>
+            <div class="raw-price-area">现价：¥9.8<p class="sold">
+                销量 66633</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">6</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/6/21/_1529549964473237674_400x400" alt="爱国者 静音无声USB电脑游戏鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                爱国者 静音无声USB电脑游戏鼠标
+            </p>
+            <div class="raw-price-area">现价：¥19.9<p class="sold">
+                销量 36167</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>40</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/7/25/_1532506264587338342_400x400" alt="咪咪兔 儿童防水智能电话手表">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                咪咪兔 儿童防水智能电话手表
+            </p>
+            <div class="raw-price-area">现价：¥99<p class="sold">
+                销量 80223</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/7/2/_1530517521104790479_400x400" alt="原裝重低音耳机">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                原裝重低音耳机
+            </p>
+            <div class="raw-price-area">现价：¥15.8<p class="sold">
+                销量 171065</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">5</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/8/15/_1534321973836682042_400x400" alt="K歌神器 唱歌通话迷你话筒">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                K歌神器 唱歌通话迷你话筒
+            </p>
+            <div class="raw-price-area">现价：¥12.8<p class="sold">
+                销量 25799</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">7</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>50</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/7/4/_1530691212879988415_400x400" alt="关键 儿童智能电话手表">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                关键 儿童智能电话手表
+            </p>
+            <div class="raw-price-area">现价：¥89<p class="sold">
+                销量 65124</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">39</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a>
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/9/8/_1536379905103654832_400x400" alt="贝贝佳 吃鸡游戏辅助按键">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                贝贝佳 吃鸡游戏辅助按键
+            </p>
+            <div class="raw-price-area">现价：¥5.8<p class="sold">
+                销量 53031</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">2</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>40</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//file.17gwx.com/sqkb/coupon/2018/9/8/_1536377519191111734_400x400" alt="Papr Watch 防水智能纸手表">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                Papr Watch 防水智能纸手表
+            </p>
+            <div class="raw-price-area">现价：¥105<p class="sold">
+                销量 10564</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">65</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i1/2185098413/TB2H27sXN3IL1JjSZPfXXcrUVXa_!!2185098413.jpg_400x400" alt="路博加 手机麦克风">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                路博加 手机麦克风
+            </p>
+            <div class="raw-price-area">现价：¥13.8<p class="sold">
+                销量 21349</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">8</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>5</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i1/2247740596/TB2u2RApM0kpuFjSspdXXX4YXXa_!!2247740596.jpg_400x400" alt="搏展 牧马人3游戏机械电竞鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                搏展 牧马人3游戏机械电竞鼠标
+            </p>
+            <div class="raw-price-area">现价：¥38<p class="sold">
+                销量 20185</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">33</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a>
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i4/2169885918/TB2XAv.hCYH8KJjSspdXXcRgVXa_!!2169885918.jpg_400x400" alt="赛士凯 iPhone 数据线">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                赛士凯 iPhone 数据线
+            </p>
+            <div class="raw-price-area">现价：¥9.8<p class="sold">
+                销量 100700</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">6</em><em class="decimal">.8</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>25</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/tfscom/i3/3328790776/TB2tTRWeICNZ1JjSZFHXXb.kVXa_!!3328790776.jpg_400x400" alt="惠普 有线电竞游戏鼠标">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                惠普 有线电竞游戏鼠标
+            </p>
+            <div class="raw-price-area">现价：¥36.9<p class="sold">
+                销量 15318</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">11</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<script type="text/javascript">
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?77a9bae208c432b76f7d08cdef6e61ec";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>

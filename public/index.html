@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+<meta name="applicable-device" content="pc,mobile">
+<link rel="stylesheet" href="index_files/common-bd30d45f57.css">
+<link rel="stylesheet" href="/font/iconfont.css">
+<script src="index_files/push.js"></script>
+	<script src="index_files/hm.js"></script>
+	<script src=""></script>
+	<script async="" src="index_files/analytics.js"></script>
+	<script type="text/javascript" src="index_files/jquery-1-c7143b6bed.js"></script>
+	<script type="text/javascript" src="index_files/common-1242da89df.js"></script>
+</head>
+<body>
+<h1 class="sno">省钱速报-天天特价</h1>
+<div id="header" class="header">
+	<div class="header-top">
+		<div class="wrapper">
+			<a class="logo-area" href="./" data-ga-event="头部:点击:头部_LOGO">
+				<img src="index_files/logo-ef4e6a15ac.png" class="logo">
+				<div class="slogan">
+					<p class="t1">天猫淘宝</p>
+					<p class="t1">一折疯抢</p>
+					<p class="t2">sqsb.com</p>
+				</div>
+			</a>
+			<div class="search-area">
+				<div class="suggest-area lg"></div>
+				<div class="input-area"><i></i><input class="search-input unfocus" value="输入关键词" type="text"></div>
+				<a class="search-btn">搜索</a>
+				<p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+			</div>
+
+			<div class="slogan-area">
+				<div class="slogan-item">
+					<p></p>
+					<p></p>
+					<p></p>
+					<p></p>
+					<p>正品好货</p>
+				</div>
+				<div class="slogan-item">
+					<p></p>
+					<p></p>
+					<p></p>
+					<p></p>
+					<p>人工精选</p>
+				</div>
+				<div class="slogan-item">
+					<p></p>
+					<p></p>
+					<p></p>
+					<p></p>
+					<p>专享优惠券</p>
+				</div>
+				<div class="slogan-item">
+					<p></p>
+					<p></p>
+					<p></p>
+					<p></p>
+					<p>全场包邮</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tab-area-plh">
+		<div class="tab-area">
+			<div class="wrapper">
+				<div class="cate-area">
+					<a href="./" class="cate-item jxtj active">商 品 分 类<span class="cate-rec"></span></a>
+				</div>
+				<div class="search-area sm">
+					<div class="suggest-area sm"></div>
+					<i></i>
+					<input class="search-input sm unfocus" value="输入关键词" type="text">
+					<p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+				</div>
+				<div class="Login" style="display: block;">
+
+					<div class="login">
+						<span class="login-login">登录</span> | <span class="login-login">注册</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="login-alert-bg">
+	<div class="login-alert">
+		<img src="index_files/login-c344517a04.png" alt="省钱速报">
+		<h2>欢迎登录</h2>
+		<div class="close">×</div>
+		<div class="content">
+			<div class="tel">
+				<input maxlength="11" placeholder="手机号" type="tel">
+			</div>
+			<div class="checkCode">
+				<input maxlength="4" placeholder="输入验证码" type="tel">
+			</div>
+			<div class="get-checkCode">发送短信验证码</div>
+			<p></p>
+			<!--<div class="checkbox">
+				<input type="checkbox"><span>记住我</span>
+			</div>-->
+			<div class="post-data">立即登录</div>
+		</div>
+	</div>
+
+</div>
+
+<script type="text/javascript">
+	$(function () {
+	    //展示登陆弹框
+		$('.login-login').on('click',function () {
+			$('.login-alert-bg').show();
+        })
+        //关闭展示登陆弹框
+        $('.close').on('click',function () {
+            $('.login-alert-bg').hide();
+        })
+		//获取验证码
+        let timer=null;
+        let num=60;
+        let flag=true;
+        let isPhone='';
+        let reg = /^1[3|4|5|7|8|9]\d{9}$/;
+        $('.get-checkCode').on('click',function () {
+            if (!flag) {
+                return;
+            }
+            isPhone = $('.tel>input').val();
+            if (isPhone == '') {
+                $('.content p').text('请输入手机号');
+				return
+            }
+            if (!reg.test(isPhone)) {
+                $('.content p').text('请输入正确手机号');
+				return
+            }
+
+            var self = $(this);
+            $.ajax({
+                'url': '/account/sms/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                },
+                'success': function (xhr) {
+                    self.addClass('color');
+                    $('.content p').text('');
+                    timer = setInterval(function () {
+                        num--;
+                        self.text(num + 's 后重发');
+                        flag = false;
+                        if (num == 0) {
+                            clearInterval(timer);
+                            self.removeClass('color');
+                            self.text('发送短信验证码');
+                            num = 60;
+                            flag = true;
+                        }
+                    }, 1000);
+                }
+            })
+        });
+        //获取是否记住密码标识
+        //登陆提交数据
+		$('.post-data').on('click',function () {
+		    let checked=$(".checkbox>input[type='checkbox']").is(':checked')
+
+            var phone = $('.tel>input').val();
+            var checkCode = $('.checkCode>input').val();
+            if(checkCode==''&&phone==''){
+                $('.content p').text('手机号、验证码不能为空');
+                return
+			}
+            if(phone==''){
+                $('.content p').text('请输入手机号');
+                return
+            }
+            if (!reg.test(phone)) {
+                $('.content p').text('请输入正确手机号');
+                return
+            }
+            if(checkCode==''){
+                $('.content p').text('请输入验证码');
+                return
+			}
+
+
+
+            // if(isPhone!=phone){
+            //     $('.content p').text('请输入正确手机号');
+            // }
+
+			$.ajax({
+                'url': '/account/login/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                    "sms_code": $('.checkCode>input').val(),
+                    "checked": checked,
+                },
+                'success': function (xhr) {
+					if(xhr.status_code===1){
+						window.location.href=window.location.href;
+					}else {
+
+					    $('.content p').text(xhr.message)
+					}
+				}
+			})
+        })
+    })
+    $(function(){
+        var headerBar = $('.header-bar'),
+            tabArea = $('#header .tab-area'),
+            sa = $('.suggest-area'),
+            si = $('.search-input'),
+            errTip = $('.err-tip'),
+            defaultTxt = '输入关键词',
+            sb = $('.search-btn');
+
+        headerBar.find('.close').on('click',function(){
+            headerBar.remove();
+            var d = new Date();
+            d.setTime(d.getTime()+(24*60*60*1000));
+            $.cookie('hideHeaderBar',1,{
+                path:'/',
+                expires:d
+            });
+        });
+
+        $(document).on('scroll',function(){
+            var _top = $(document).scrollTop();
+            if(_top >= 400){
+                $('.Login').hide();
+                tabArea.addClass('fixed');
+            }else{
+                tabArea.removeClass('fixed');
+                $('.Login').show();
+            }
+        });
+
+        setTimeout(function(){
+            si.on('focus',function(){
+                var _this = $(this),
+                    q = _this.val();
+                if(q == defaultTxt){
+                    si.val('');
+                }
+                _this.removeClass('unfocus');
+
+                keywordSuggest(q,_this);
+            }).on('blur',function(){
+                if($(this).val() == ''){
+                    si.val(defaultTxt);
+                }
+                $(this).addClass('unfocus');
+            }).on('keyup',function(e){
+                var _this = $(this);
+                var keycode = e.keyCode,
+                    q = $(this).val();
+
+                $('.search-input.unfocus').val(q);
+
+                if(keycode == 13 && q.trim()){
+                    goSearch(q.trim());
+                }
+
+                if(q.trim().match(/http|\.tmall|\.taobao/)){
+                    errTip.show();
+                }else{
+                    errTip.hide();
+                }
+
+                keywordSuggest(q,_this);
+            });
+        },0);
+
+
+        function keywordSuggest(q,_this){
+            q = q.trim();
+            if(q && q != defaultTxt){
+                $.ajax({
+                    url:'/s/suggestWord/',
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        q:q
+                    },
+                    success:function(res){
+                        if(res.status_code == 1 && res.data && res.data.list){
+                            sa = _this.hasClass('sm') ? $('.suggest-area.sm') : $('.suggest-area.lg');
+                            sa.html(createHTMLSuggest(res.data.list));
+                            $('.suggest-item').on('click',function(){
+                                goSearch($(this).html());
+                            });
+                        }
+                    }
+                });
+            }else{
+                $('.suggest-area').html('');
+            }
+        }
+
+        function createHTMLSuggest(list){
+            var htmlStr = '<div class="suggest-list">';
+            for(var i=0,len=list.length;i<len;i++){
+                htmlStr += '<p class="suggest-item">'+list[i]+'</p>';
+            }
+            if(list && list.length > 0){
+                htmlStr += '<p class="suggest-close">关闭</p>';
+            }
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+
+//        $(document).on('click',function(e){
+//            var tar = $(e.target);
+//            if(!tar.hasClass('suggest-area') && !tar.hasClass('search-input')){
+//                $('.suggest-area').html('');
+//            }
+//        });
+//
+//        sb.on('click',function(){
+//            var q = $(si[0]).val().trim();
+//            if(q && q != defaultTxt){
+//                goSearch(q);
+//            }
+//        });
+//
+//        function goSearch(q){
+//            if(q.match(/http|\.tmall|\.taobao/)){
+//                return;
+//            }
+//            ga('send','event','搜索','搜索','搜索');
+//            var cahnnel = Util.getQueryString(window.location.href)['channel'];
+//            window.location.href = '/s/?q='+encodeURIComponent(q)+(cahnnel?'&channel='+cahnnel:'');
+//        }
+    });
+</script>
+<div class="wrapper home-oper-area">
+	<div class="cate-area">
+			<div class="cate-line">
+				<i class="iconfont">&#xe6f8;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./nvzhuang.html">女装</a>
+					<span>/</span>
+				<a class="cate-item" href="./neiyi.html">内衣</a>
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe661;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./meizhuang.html">美妆</a>
+					<span>/</span>
+				<a class="cate-item" href="./gehu.html">个护</a>
+				
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe601;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./shipin.html">食品</a>
+					<span>/</span>
+				<a class="cate-item" href="./baihuo.html">百货</a>
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe600;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./shuma.html">数码</a>
+			</div>
+		<div class="cate-line">
+			<i class="iconfont">&#xe626;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./peishi.html">配饰</a>
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe607;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./muying.html">母婴</a>
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe65d;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./yundong.html">运动</a>
+			</div>
+			<div class="cate-line">
+				<i class="iconfont">&#xe666;&nbsp;&nbsp;</i>
+				<a class="cate-item" href="./nanzhuang.html">男装</a>
+			</div>
+	</div>
+
+	<div class="banner-top">
+		<div class="banner-area swiper-container swiper-container-horizontal">
+			<div class="swiper-wrapper" style="transition-duration: 0ms; transform: translate3d(0px, 0px, 0px);">
+				<a class="swiper-slide" href="/xihu.html" style="width: 660px;">
+					<img style="width: 100%; height: 100%; opacity: 1;" class="lazy" data-original="//file.17gwx.com/sqkb/element/2018/09/15/699955b9ce3f55bcb1.jpg" src="index_files/699955b9ce3f55bcb1.jpg">
+				</a>
+				
+				<a  class="swiper-slide" href="/mianmo.html" style="width: 660px;">
+					<img style="width: 100%; height: 100%; opacity: 1;" class="lazy" data-original="//file.17gwx.com/sqkb/element/2018/09/15/873965b9ce4c3bf1f5.jpg" src="index_files/873965b9ce4c3bf1f5.jpg">
+				</a>
+				
+				<a class="swiper-slide" href="/erji.html" style="width: 660px;">
+					<img style="width: 100%; height: 100%; opacity: 1;" class="lazy" data-original="//file.17gwx.com/sqkb/element/2018/09/15/920635b9ce45e84105.jpg" src="index_files/920635b9ce45e84105.jpg">
+				</a>
+			</div>
+			<div class="swiper-bottom">
+				<div class="swiper-pager swiper-pagination-clickable swiper-pagination-bullets" id="bannerPager"><span class="swiper-pagination-bullet swiper-pagination-bullet-active"></span><span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span><span class="swiper-pagination-bullet"></span></div>
+			</div>
+			
+		</div>
+		<div class="top-right-banner">
+			<a data-ga-event="首页:点击:首页_右侧小banner" target="_blank">
+				<img src="index_files/k9-banner.png">
+			</a>
+		</div>
+	</div>
+
+	<div class="small-banner-area">
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner0" href="./meizhuang.html">
+			<img class="lazy" alt="美妆" src="index_files/434045a1d2d48dff59.jpg" style="opacity: 1;">
+			<p class="title">美妆</p>
+			</a>
+		</div>
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner1" href="./shipin.html">
+			<img class="lazy" alt="食品" src="index_files/571045b87b109b8860.jpg" style="opacity: 1;">
+			<p class="title">食品</p>
+			</a>
+		</div>
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner2" href="./baihuo.html">
+			<img class="lazy" alt="百货" src="index_files/840475aea7ac3ef6ea.jpg" style="opacity: 1;">
+			<p class="title">百货</p>
+			</a>
+		</div>
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner3" href="./nvzhuang.html">
+			<img class="lazy"  alt="女装" src="index_files/540265ac2f7c42d1ce.jpg" style="opacity: 1;">
+			<p class="title">女装</p>
+			</a>
+		</div>
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner4" href="./neiyi.html">
+			<img class="lazy" alt="内衣" src="index_files/449125a1fec1be6397.jpg" style="opacity: 1;">
+			<p class="title">内衣</p>
+			</a>
+		</div>
+
+		<div class="small-banner-item">
+			<a data-ga-event="首页:点击:首页_小banner5" href="./gehu.html">
+			<img class="lazy" alt="个护" src="index_files/128335a1fedf594da7.jpg" style="opacity: 1;">
+			<p class="title">个护</p>
+			</a>
+		</div>
+
+	</div>
+
+</div>
+<div class="wrapper home-wrapper">
+
+	<div class="zk-list-area">
+		<div class="head">
+			<i class="iconfont">&#xe642;</i>
+			<span class="title">精选推荐</span>
+			<span class="subtitle">好货推荐</span>
+		</div>
+		<div class="zk-list clearfix" id="couponList">
+			<div>
+				<!--正常业务 start-->
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item1.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>45</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//img.alicdn.com/imgextra/i1/3385948114/TB2881npYZnBKNjSZFrXXaRLFXa_!!3385948114.jpg_400x400" alt="香港凯琳娜 哑光口红亚光口红正品持久不易脱色孕妇防水包邮" src="index_files/TB2881npYZnBKNjSZFrXXaRLFXa_3385948114.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							香港凯琳娜 哑光口红亚光口红正品持久不易脱色孕妇防水包邮
+						</p>
+						<div class="raw-price-area">现价：¥50.9<p class="sold">销量 322</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">5</em><em class="decimal">.9</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000000/">立即抢购</a>
+						</div>
+					</div>
+				
+
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item2.html">
+
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>3</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/i2/3309412738/O1CN011W62sPi2Up58NaZ_!!3309412738.jpg_400x400" alt="网红同款初秋套装女时尚名媛小香风气质皮裙两件套2018新款秋装" src="index_files/O1CN011W62sPi2Up58NaZ_3309412738.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							<i class="tmall-icon"></i>
+							<span class="post-free">包邮</span>
+							网红同款初秋套装女时尚名媛小香风气质皮裙两件套2018新款秋装
+						</p>
+						<div class="raw-price-area">现价：¥98<p class="sold">销量 1975</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">95</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item3.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>20</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/i3/2249017493/TB2AWDxu2iSBuNkSnhJXXbDcpXa_!!2249017493.jpg_400x400" alt="儿童韩版撞色透气运动网鞋" src="index_files/TB2AWDxu2iSBuNkSnhJXXbDcpXa_2249017493.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							儿童韩版撞色透气运动网鞋
+						</p>
+						<div class="raw-price-area">现价：¥49.8<p class="sold">销量 21770</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">29</em><em class="decimal">.8</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000002/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item4.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>20</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//img.alicdn.com/imgextra/i3/2089237362/TB2p6avsC0mpuFjSZPiXXbssVXa_!!2089237362.jpg_400x400" alt="加绒加厚电动车挡风被" src="index_files/TB2p6avsC0mpuFjSZPiXXbssVXa_2089237362.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							加绒加厚电动车挡风被
+						</p>
+						<div class="raw-price-area">现价：¥29.9<p class="sold">销量 6971</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">9</em><em class="decimal">.9</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000003/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item5.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>5</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/bao/uploaded/i3/1766047907/TB2FAMRbjfguuRjy1zeXXb0KFXa_!!1766047907-0-item_pic.jpg_400x400" alt="网红毛衣秋装针织套装时尚秋冬季两件套" src="index_files/TB2FAMRbjfguuRjy1zeXXb0KFXa_1766047907-0-item_pic.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							网红毛衣秋装针织套装时尚秋冬季两件套
+						</p>
+						<div class="raw-price-area">现价：¥129<p class="sold">销量 3819</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">124</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000004/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item6.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>2</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/bao/uploaded/i4/848016274/TB2MhR1aBsmBKNjSZFFXXcT9VXa_!!848016274.jpg_400x400" alt="时尚套装春夏新款2018女装韩范气质雪纺衬衫显瘦高腰九分裤两件套" src="index_files/TB2MhR1aBsmBKNjSZFFXXcT9VXa_848016274.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							时尚套装春夏新款2018女装韩范气质雪纺衬衫显瘦高腰九分裤两件套
+						</p>
+						<div class="raw-price-area">现价：¥69.8<p class="sold">销量 139</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">67</em><em class="decimal">.8</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000005/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item7.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>5</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//file.17gwx.com/sqkb/coupon/2018/7/23/_1532316534759325885_400x400" alt="丽亚斯 葫芦水滴海绵蛋 3个装" src="index_files/_1532316534759325885_400x400.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							丽亚斯 葫芦水滴海绵蛋 3个装
+						</p>
+						<div class="raw-price-area">现价：¥13.8<p class="sold">销量 134140</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">8</em><em class="decimal">.8</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000006/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item8.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>3</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//img.alicdn.com/imgextra/i1/2098439569/TB2VTQ5aAvoK1RjSZFDXXXY3pXa_!!2098439569-0-item_pic.jpg_400x400" alt="品牌清仓 断码真皮皮靴子特价女鞋亏本白菜价粗高跟平底大码小码" src="index_files/TB2VTQ5aAvoK1RjSZFDXXXY3pXa_2098439569-0-item_pic.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							品牌清仓 断码真皮皮靴子特价女鞋亏本白菜价粗高跟平底大码小码
+						</p>
+						<div class="raw-price-area">现价：¥59<p class="sold">销量 4654</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">56</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000007/">立即抢购</a>
+						</div>
+					</div>
+
+
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item9.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>1</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//img.alicdn.com/imgextra/i3/790054381/TB2_RkraO6guuRkSnb4XXbu4XXa_!!790054381.jpg_400x400" alt="修眉刀 眉毛刀 刮眉刀片 画眉卡刀架画眉神器套装眉笔眉剪纹眉夹" src="index_files/TB2_RkraO6guuRkSnb4XXbu4XXa_790054381.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							修眉刀 眉毛刀 刮眉刀片 画眉卡刀架画眉神器套装眉笔眉剪纹眉夹
+						</p>
+						<div class="raw-price-area">现价：¥2.5<p class="sold">销量 36098</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">1</em><em class="decimal">.5</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000008/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item10.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>3</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//img.alicdn.com/imgextra/i1/2762523528/TB2BY05rY1YBuNjSszhXXcUsFXa_!!2762523528.jpg_400x400" alt="ins捕梦网挂饰led小彩灯" src="index_files/TB2BY05rY1YBuNjSszhXXcUsFXa_2762523528.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							ins捕梦网挂饰led小彩灯
+						</p>
+						<div class="raw-price-area">现价：¥7<p class="sold">销量 1659</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">4</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000009/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item11.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>110</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/i7/TB1lbzBj7fb_uJjSsrbYXH6bVXa_M2.SS2_400x400" alt="吉登 声波电动成人牙刷" src="index_files/TB1lbzBj7fb_uJjSsrbYXH6bVXa_M2.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							吉登 声波电动成人牙刷
+						</p>
+						<div class="raw-price-area">现价：¥121.9<p class="sold">销量 426715</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">11</em><em class="decimal">.9</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000010/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item12.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>20</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/i1/253558384/TB2b8Owm4PI8KJjSspoXXX6MFXa_!!253558384.jpg_400x400" alt="韩版牛仔外套加卫衣连衣裙两件套" src="index_files/TB2b8Owm4PI8KJjSspoXXX6MFXa_253558384.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							
+							韩版牛仔外套加卫衣连衣裙两件套
+						</p>
+						<div class="raw-price-area">现价：¥148<p class="sold">销量 18600</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">128</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000011/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item13.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>3</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/i2/3301295038/TB2ZTHiXRyWBuNkSmFPXXXguVXa_!!3301295038.jpg_400x400" alt="秋冬港味牛仔上衣裙子时髦两件套" src="index_files/TB2ZTHiXRyWBuNkSmFPXXXguVXa_3301295038.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							秋冬港味牛仔上衣裙子时髦两件套
+						</p>
+						<div class="raw-price-area">现价：¥48.8<p class="sold">销量 1025</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">45</em><em class="decimal">.8</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000012/">立即抢购</a>
+						</div>
+					</div>
+				
+
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item14.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>10</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/bao/uploaded/i1/2106525799/TB10DxZSFXXXXXqaXXXXXXXXXXX_!!0-item_pic.jpg_400x400" alt="南极人 运动隐形棉袜10双" src="index_files/TB10DxZSFXXXXXqaXXXXXXXXXXX_0-item_pic.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							南极人 运动隐形棉袜10双
+						</p>
+						<div class="raw-price-area">现价：¥16.8<p class="sold">销量 698206</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">6</em><em class="decimal">.8</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000013/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item15.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>1</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="https://img.alicdn.com/bao/uploaded/i2/723765844/TB2Hk4sE1ySBuNjy1zdXXXPxFXa_!!723765844.jpg_400x400" alt="2018秋季新款韩版小香风气质淑女秋款休闲两件套装女秋冬季时尚潮" src="index_files/TB2Hk4sE1ySBuNjy1zdXXXPxFXa_723765844.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							
+							<span class="post-free">包邮</span>
+							
+							
+							2018秋季新款韩版小香风气质淑女秋款休闲两件套装女秋冬季时尚潮
+						</p>
+						<div class="raw-price-area">现价：¥32.9<p class="sold">销量 464</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">31</em><em class="decimal">.9</em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000014/">立即抢购</a>
+						</div>
+					</div>
+
+				
+					<div class="zk-item">
+						<div class="img-area">
+							<a href="./item16.html">
+								
+								
+								
+								<div data-ga-event="商品_右上角领券:点击:首页" class="lq">
+									<div class="lq-t">
+										<p class="lq-t-d1">领券立减</p>
+										<p class="lq-t-d2">¥<span>20</span></p>
+									</div>
+									<div class="lq-b"></div>
+								</div>
+								
+
+								
+
+
+								<img data-ga-event="专场_图片:点击:首页" class="lazy" data-original="//file.17gwx.com/sqkb/coupon/2018/7/5/_1530757520234053015_400x400" alt="缤肌 玻尿酸补水面膜15片" src="index_files/_1530757520234053015_400x400.jpg" style="opacity: 1;">
+							</a>
+						</div>
+						<p class="title-area elli">
+							
+							
+							<i class="tmall-icon"></i>
+							
+							
+							
+							缤肌 玻尿酸补水面膜15片
+						</p>
+						<div class="raw-price-area">现价：¥27<p class="sold">销量 80496</p></div>
+						<div class="info">
+							<div class="price-area">
+								<span class="price">券后价：¥<em class="number-font">7</em><em class="decimal"></em></span>
+							</div>
+							<a data-ga-event="专场_立即抢购:点击:首页" class="buy-btn" target="_blank" href="https://www.sqkb.com/topic/9000015/">立即抢购</a>
+						</div>
+					</div>
+
+
+			</div>
+		</div>
+	</div>
+
+</div>
+<div class="footer">
+	<div class="footer-bootom">
+		<div class="wrapper">
+			<p>地址：北京市通州区东石东一路 · 京ICP备18047471号-1 · 省钱速报 - 北京与你互娱科技有限公司旗下品牌</p>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="index_files/swiper4-56c8f9de0f.js"></script>
+
+<script type="text/javascript">
+$(function(){
+	var sw = new Swiper('.banner-area',{
+		autoplay: {
+			delay:5000,
+			disableOnInteraction:false,
+		},
+		loop:false,
+		pagination: {
+			el: '#bannerPager',
+			clickable:true,
+		}
+	});
+
+});
+</script>

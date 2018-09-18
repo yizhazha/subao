@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="applicable-device" content="pc,mobile">
+    <link rel="stylesheet" href="meizhuang_files/common-bd30d45f57.css">
+    <script src="meizhuang_files/push.js"></script><script src="meizhuang_files/hm.js"></script><script async="" src="meizhuang_files/analytics.js"></script><script type="text/javascript" src="meizhuang_files/jquery-1-c7143b6bed.js"></script>
+    <script type="text/javascript" src="meizhuang_files/common-1242da89df.js"></script>
+</head>
+<body>
+<h1 class="sno">女装优惠券</h1>
+
+<div id="header" class="header">
+    <div class="header-top">
+        <div class="wrapper">
+            <a class="logo-area" href="./" data-ga-event="头部:点击:头部_LOGO">
+                <img src="erji_files/logo-ef4e6a15ac.png" class="logo">
+                <div class="slogan">
+                    <p class="t1">天猫淘宝</p>
+                    <p class="t1">一折疯抢</p>
+                    <p class="t2">sqsb.com</p>
+                </div>
+            </a>
+
+            <div class="search-area">
+                <div class="suggest-area lg"></div>
+                <div class="input-area"><i></i><input class="search-input unfocus" value="输入关键词" type="text"></div>
+                <a href="javascript:;" class="search-btn">搜索</a>
+                <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+            </div>
+
+            <div class="slogan-area">
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>正品好货</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>人工精选</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>专享优惠券</p>
+                </div>
+                <div class="slogan-item">
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p></p>
+                    <p>全场包邮</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-area-plh">
+        <div class="tab-area">
+            <div class="wrapper">
+                <div class="search-area sm">
+                    <div class="suggest-area sm"></div>
+                    <i></i>
+                    <input class="search-input sm unfocus" value="输入关键词" type="text">
+                    <p class="err-tip"><i class="err-tip-icon"></i>亲，请复制宝贝全称进行搜索~<i class="arr-up"></i></p>
+                </div>
+                <div class="Login" style="display: block;">
+
+                    <div class="login">
+                        <span class="login-login">登录</span> | <span class="login-login">注册</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="login-alert-bg">
+    <div class="login-alert">
+        <img src="erji_files/login-c344517a04.png" alt="省钱快报">
+        <h2>欢迎登录</h2>
+        <div class="close">×</div>
+        <div class="content">
+            <div class="tel">
+                <input maxlength="11" placeholder="手机号" type="tel">
+            </div>
+            <div class="checkCode">
+                <input maxlength="4" placeholder="输入验证码" type="tel">
+            </div>
+            <div class="get-checkCode">发送短信验证码</div>
+            <p></p>
+            <!--<div class="checkbox">
+                <input type="checkbox"><span>记住我</span>
+            </div>-->
+            <div class="post-data">立即登录</div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+	$(function () {
+	    //展示登陆弹框
+		$('.login-login').on('click',function () {
+			$('.login-alert-bg').show();
+        })
+        //关闭展示登陆弹框
+        $('.close').on('click',function () {
+            $('.login-alert-bg').hide();
+        })
+		//获取验证码
+        let timer=null;
+        let num=60;
+        let flag=true;
+        let isPhone='';
+        let reg = /^1[3|4|5|7|8|9]\d{9}$/;
+        $('.get-checkCode').on('click',function () {
+            if (!flag) {
+                return;
+            }
+            isPhone = $('.tel>input').val();
+            if (isPhone == '') {
+                $('.content p').text('请输入手机号');
+				return
+            }
+            if (!reg.test(isPhone)) {
+                $('.content p').text('请输入正确手机号');
+				return
+            }
+
+            var self = $(this);
+            $.ajax({
+                'url': '/account/sms/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                },
+                'success': function (xhr) {
+                    self.addClass('color');
+                    $('.content p').text('');
+                    timer = setInterval(function () {
+                        num--;
+                        self.text(num + 's 后重发');
+                        flag = false;
+                        if (num == 0) {
+                            clearInterval(timer);
+                            self.removeClass('color');
+                            self.text('发送短信验证码');
+                            num = 60;
+                            flag = true;
+                        }
+                    }, 1000);
+                }
+            })
+        });
+        //获取是否记住密码标识
+        //登陆提交数据
+		$('.post-data').on('click',function () {
+		    let checked=$(".checkbox>input[type='checkbox']").is(':checked')
+
+            var phone = $('.tel>input').val();
+            var checkCode = $('.checkCode>input').val();
+            if(checkCode==''&&phone==''){
+                $('.content p').text('手机号、验证码不能为空');
+                return
+			}
+            if(phone==''){
+                $('.content p').text('请输入手机号');
+                return
+            }
+            if (!reg.test(phone)) {
+                $('.content p').text('请输入正确手机号');
+                return
+            }
+            if(checkCode==''){
+                $('.content p').text('请输入验证码');
+                return
+			}
+
+
+
+            // if(isPhone!=phone){
+            //     $('.content p').text('请输入正确手机号');
+            // }
+
+			$.ajax({
+                'url': '/account/login/',
+                'type': 'post',
+                'data': {
+                    "mobile": $('.tel>input').val(),
+                    "sms_code": $('.checkCode>input').val(),
+                    "checked": checked,
+                },
+                'success': function (xhr) {
+					if(xhr.status_code===1){
+						window.location.href=window.location.href;
+					}else {
+
+					    $('.content p').text(xhr.message)
+					}
+				}
+			})
+        })
+    })
+    $(function(){
+        var headerBar = $('.header-bar'),
+            tabArea = $('#header .tab-area'),
+            sa = $('.suggest-area'),
+            si = $('.search-input'),
+            errTip = $('.err-tip'),
+            defaultTxt = '输入关键词',
+            sb = $('.search-btn');
+
+        headerBar.find('.close').on('click',function(){
+            headerBar.remove();
+            var d = new Date();
+            d.setTime(d.getTime()+(24*60*60*1000));
+            $.cookie('hideHeaderBar',1,{
+                path:'/',
+                expires:d
+            });
+        });
+
+        $(document).on('scroll',function(){
+            var _top = $(document).scrollTop();
+            if(_top >= 400){
+                $('.Login').hide();
+                tabArea.addClass('fixed');
+            }else{
+                tabArea.removeClass('fixed');
+                $('.Login').show();
+            }
+        });
+
+        setTimeout(function(){
+            si.on('focus',function(){
+                var _this = $(this),
+                    q = _this.val();
+                if(q == defaultTxt){
+                    si.val('');
+                }
+                _this.removeClass('unfocus');
+
+                keywordSuggest(q,_this);
+            }).on('blur',function(){
+                if($(this).val() == ''){
+                    si.val(defaultTxt);
+                }
+                $(this).addClass('unfocus');
+            }).on('keyup',function(e){
+                var _this = $(this);
+                var keycode = e.keyCode,
+                    q = $(this).val();
+
+                $('.search-input.unfocus').val(q);
+
+                if(keycode == 13 && q.trim()){
+                    goSearch(q.trim());
+                }
+
+                if(q.trim().match(/http|\.tmall|\.taobao/)){
+                    errTip.show();
+                }else{
+                    errTip.hide();
+                }
+
+                keywordSuggest(q,_this);
+            });
+        },0);
+
+
+        function keywordSuggest(q,_this){
+            q = q.trim();
+            if(q && q != defaultTxt){
+                $.ajax({
+                    url:'/s/suggestWord/',
+                    type:'get',
+                    dataType:'json',
+                    data:{
+                        q:q
+                    },
+                    success:function(res){
+                        if(res.status_code == 1 && res.data && res.data.list){
+                            sa = _this.hasClass('sm') ? $('.suggest-area.sm') : $('.suggest-area.lg');
+                            sa.html(createHTMLSuggest(res.data.list));
+                            $('.suggest-item').on('click',function(){
+                                goSearch($(this).html());
+                            });
+                        }
+                    }
+                });
+            }else{
+                $('.suggest-area').html('');
+            }
+        }
+
+        function createHTMLSuggest(list){
+            var htmlStr = '<div class="suggest-list">';
+            for(var i=0,len=list.length;i<len;i++){
+                htmlStr += '<p class="suggest-item">'+list[i]+'</p>';
+            }
+            if(list && list.length > 0){
+                htmlStr += '<p class="suggest-close">关闭</p>';
+            }
+            htmlStr += '</div>';
+            return htmlStr;
+        }
+
+        $(document).on('click',function(e){
+            var tar = $(e.target);
+            if(!tar.hasClass('suggest-area') && !tar.hasClass('search-input')){
+                $('.suggest-area').html('');
+            }
+        });
+
+        sb.on('click',function(){
+            var q = $(si[0]).val().trim();
+            if(q && q != defaultTxt){
+                goSearch(q);
+            }
+        });
+
+        function goSearch(q){
+            if(q.match(/http|\.tmall|\.taobao/)){
+                return;
+            }
+            ga('send','event','搜索','搜索','搜索');
+            var cahnnel = Util.getQueryString(window.location.href)['channel'];
+            window.location.href = '/s/?q='+encodeURIComponent(q)+(cahnnel?'&channel='+cahnnel:'');
+        }
+    });
+</script>
+
+<div class="wrapper cate-wrapper">
+
+    <div class="collection-top">
+        <p class="head">女装商品列表</p>
+    </div>
+	<div class="zk-list g-zk-list clearfix" id="couponList">
+        <div>
+            <!--运营位优先展示 start-->
+            
+            <!--运营位优先展示 end-->
+
+            <!--正常业务 start-->
+
+            <!--正常业务 end-->
+
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>30</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i3/3854162345/TB22NZGvDdYBeNkSmLyXXXfnVXa_!!3854162345.jpg_400x400" alt="慵懒风韩版格子开衫毛衣">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                慵懒风韩版格子开衫毛衣
+            </p>
+            <div class="raw-price-area">现价：¥87<p class="sold">
+                销量 2027</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">57</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i4/2557012639/O1CN011VMhfeqq4JX0HWB_!!2557012639.jpg_400x400" alt="晚晚风针织开衫长裙两件套">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                晚晚风针织开衫长裙两件套
+            </p>
+            <div class="raw-price-area">现价：¥79.9<p class="sold">
+                销量 1150</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/2974527348/TB1J4p2SVXXXXaZXpXXXXXXXXXX_!!0-item_pic.jpg_400x400" alt="春秋季长袖t恤女2018新款韩版白色打底衫修身显瘦纯棉紧身上衣">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                春秋季长袖t恤女2018新款韩版白色打底衫修身显瘦纯棉紧身上衣
+            </p>
+            <div class="raw-price-area">现价：¥39<p class="sold">
+                销量 796</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">29</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>50</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i1/1025503140/O1CN011Z4A6J74dqrKySV_!!1025503140.jpg_400x400" alt="秋装新款2018韩版chic宽松显瘦V领长袖衬衫女学生时尚开衫上衣外">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                秋装新款2018韩版chic宽松显瘦V领长袖衬衫女学生时尚开衫上衣外
+            </p>
+            <div class="raw-price-area">现价：¥89.9<p class="sold">
+                销量 809</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">39</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i4/2201854082/O1CN011g1bCCKPttyYThd_!!2201854082.jpg_400x400" alt="秋装新款chic喇叭袖针织衫裙子套装时尚港风毛衣长裙两件套装裙">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                秋装新款chic喇叭袖针织衫裙子套装时尚港风毛衣长裙两件套装裙
+            </p>
+            <div class="raw-price-area">现价：¥79.9<p class="sold">
+                销量 457</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>50</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i1/3705390287/O1CN011DzU7Kdl5xDNc1a_!!3705390287.jpg_400x400" alt="皮衣女短款春秋2018新款韩版学生百搭pu皮夹克宽松bf显瘦机车外套">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                皮衣女短款春秋2018新款韩版学生百搭pu皮夹克宽松bf显瘦机车外套
+            </p>
+            <div class="raw-price-area">现价：¥119<p class="sold">
+                销量 547</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">69</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" target="_blank" href="https://www.sqkb.com/coupon/28217613/">立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i3/3336064832/O1CN011lZ6FQa66zwB3gs_!!3336064832.jpg_400x400" alt="白色长袖t恤女v领宽松韩版夏鸡心领2018新款秋打底衫女上衣服">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                白色长袖t恤女v领宽松韩版夏鸡心领2018新款秋打底衫女上衣服
+            </p>
+            <div class="raw-price-area">现价：¥39<p class="sold">
+                销量 752</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">29</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>2</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//gaitaobao3.alicdn.com/tfscom/i3/780303559/TB2fDDndqmgSKJjSspiXXXyJFXa_!!780303559.jpg_400x400" alt="小心机刺绣收腰复古赫本小黑裙">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                小心机刺绣收腰复古赫本小黑裙
+            </p>
+            <div class="raw-price-area">现价：¥49.9<p class="sold">
+                销量 4038</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">47</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a>
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i2/793056511/TB21aNBobZnBKNjSZFhXXc.oXXa_!!793056511.jpg_400x400" alt="加绒运动裤女冬季长裤宽松大码金丝绒裤子加厚休闲哈伦小脚卫裤秋">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                加绒运动裤女冬季长裤宽松大码金丝绒裤子加厚休闲哈伦小脚卫裤秋
+            </p>
+            <div class="raw-price-area">现价：¥69<p class="sold">
+                销量 2031</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">49</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i1/2201854082/O1CN011g1bC9JcSe6jCi6_!!2201854082.jpg_400x400" alt="2018新款chic针织衫早秋慵懒上衣配裙子套装港风仙女裙长裙两件套">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                2018新款chic针织衫早秋慵懒上衣配裙子套装港风仙女裙长裙两件套
+            </p>
+            <div class="raw-price-area">现价：¥79.9<p class="sold">
+                销量 520</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>3</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="//img.alicdn.com/imgextra/i2/2011301966/TB2g4BehxuTBuNkHFNRXXc9qpXa_!!2011301966.jpg_400x400" alt="港味高腰半身A字裙">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                港味高腰半身A字裙
+            </p>
+            <div class="raw-price-area">现价：¥29.9<p class="sold">
+                销量 1495</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">26</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>20</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i4/3012579599/TB2g.P3p3ZC2uNjSZFnXXaxZpXa_!!3012579599.jpg_400x400" alt="秋装蕾丝拼接半高领针织连衣裙">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                秋装蕾丝拼接半高领针织连衣裙
+            </p>
+            <div class="raw-price-area">现价：¥79.9<p class="sold">
+                销量 8214</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">59</em><em class="decimal">.9</em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>90</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/i1/3952526448/TB2aqSCczbguuRkHFrdXXb.LFXa_!!3952526448.jpg_400x400" alt="韩版过膝双排扣风衣">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                韩版过膝双排扣风衣
+            </p>
+            <div class="raw-price-area">现价：¥189<p class="sold">
+                销量 2564</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">99</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>300</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i3/534935777/O1CN011sXuWqo9OvcZq75_!!534935777.jpg_400x400" alt="【超值断码清仓】羊绒衫毛衣女圆领修身打底衫时尚【数量有限】">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+
+                <span class="post-free">包邮</span>
+
+
+                【超值断码清仓】羊绒衫毛衣女圆领修身打底衫时尚【数量有限】
+            </p>
+            <div class="raw-price-area">现价：¥369<p class="sold">
+                销量 14966</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">69</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+        <div class="zk-item">
+            <div class="img-area">
+                <a >
+
+
+                    <div data-ga-event="商品_右上角领券:点击:品类" class="lq">
+                        <div class="lq-t">
+                            <p class="lq-t-d1">领券立减</p>
+                            <p class="lq-t-d2">¥<span>10</span></p>
+                        </div>
+                        <div class="lq-b"></div>
+
+                    </div>
+
+                    <img data-ga-event="商品_图片:点击:品类" class="lazy lazyLoad" data-original="https://img.alicdn.com/bao/uploaded/i3/3543733297/TB2RxwhqfImBKNjSZFlXXc43FXa_!!3543733297-0-item_pic.jpg_400x400" alt="情侣装2018春装新款韩版刺绣拼接高领卫衣女学生宽松秋季上衣男潮">
+                </a>
+            </div>
+            <p class="title-area elli">
+
+
+                <i class="tmall-icon"></i>
+
+
+                <span class="post-free">包邮</span>
+
+
+                情侣装2018春装新款韩版刺绣拼接高领卫衣女学生宽松秋季上衣男潮
+            </p>
+            <div class="raw-price-area">现价：¥36<p class="sold">
+                销量 355</p></div>
+            <div class="info">
+                <div class="price-area"><span class="price">券后价：¥<em class="number-font">26</em><em class="decimal"></em></span>
+                </div>
+                <a data-ga-event="商品_立即抢购:点击:品类" class="buy-btn" >立即抢购</a>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+</script>
+
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?77a9bae208c432b76f7d08cdef6e61ec";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script>
+    (function(){
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        }
+        else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
